@@ -15,7 +15,7 @@ All notebooks:
 ## Notebook 2
 
 ### Objectives
-This uses a standard Encoder-Decoder network as a Sequence-to-Sequence Model. The output (actually, the hidden state) contains the gist of information as captured by the RNN layer of the Encoder (implemented via GRU). This state is passed on to the Decoder as its initial hidden state.
+This uses a standard Encoder-Decoder network as a Sequence-to-Sequence Model. The output (actually, the hidden state) contains the gist of information as captured by the RNN layer of the Encoder (implemented via GRU). This state is passed on to the Decoder as its initial hidden state. Both the Encoder and Decoder use a single-layer of GRU. 
 
 ### Training Log
 ![](logs2_.png)
@@ -23,15 +23,15 @@ This uses a standard Encoder-Decoder network as a Sequence-to-Sequence Model. Th
 ### Plot of Loss/Perplexity vs. Epoch
 ![](plot2.png)
 
-### Sample Prediction
+### Sample Predictions
 ![](sample2.png)
 
 
 ## Notebook 3
 
-This model uses bidirectional GRU; the 'forward GRU' captures information while processing the sequence from left-to-right and the 'backward GRU' captures information while processing the sequence from right-to-left
+This model uses bidirectional GRU; the 'forward GRU' captures information while processing the sequence from left-to-right and the 'backward GRU' captures information while processing the sequence from right-to-left. Since the decoder is not bidirectional, we have to concatenate the forward and backward state in the Encoder Module.
 
-In addition, it uses attention to capture the 
+In addition, it uses attention to capture the gist from the entire sequence (rather than just from the final state)
 ### Objectives
 
 
@@ -41,14 +41,18 @@ In addition, it uses attention to capture the
 ### Plot of Loss/Perplexity vs. Epoch
 ![](plot3.png)
 
-### Sample Prediction
+### Sample Predictions
 ![](sample3.png)
 
 
 ## (Optional) Notebook 4
 
 ### Objectives
+This notebook builds upon the previous one and adds two improvements
+- packed padded sequences: this prevents 'learning' over the padding tokens in the encoder
+- masking: ignores attention over padding tokens
 
+In addition, it also plots the attention between the source and target sequences. It ends by calculating the BLEU scores.
 
 ### Changes Made
 The code is almost the same except for one major change: In the Encoder Module, we are using `nn.utils.rnn.pack_padded_sequence` which needs the length of the source sequence (in addition to the sequence itself). This has been done by adding the following line inside the `collate_fn(batch)` function. 
@@ -72,4 +76,4 @@ Also, some additional lines (related to converting to and fro between index and 
 ![](att4.png)
 
 ### BLUE Scores
-After training, a BLEU score of **26.75** was acheived.
+After training, a BLEU score of **26.75** was acheived on the test data.
