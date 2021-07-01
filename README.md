@@ -15,7 +15,7 @@ All notebooks:
 ## Notebook 2
 
 ### Training Log
-![](logs2.png)
+![](logs2_.png)
 
 ### Plot of Loss/Perplexity vs. Epoch
 ![](plot2.png)
